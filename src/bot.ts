@@ -16,26 +16,26 @@ export class Bot {
   }
 
   public listen(): Promise<string> {
-    this.client.on("presenceUpdate", (message) => {
-      if (message !== null && message.member !== null) {
-        const activities = message.member.presence.activities;
+    this.client.on("presenceUpdate", (_, newPres) => {
+      if (newPres !== null && newPres.member !== null) {
+        const activities = newPres.member.presence.activities;
         if (!activities.length) {
-          message.guild.roles.fetch().then((x) => {
+          newPres.guild.roles.fetch().then((x) => {
             for (const item of x) {
               const role = item[1];
               if (role.name === "Active") {
-                message.member.roles.remove(role, "Playing Diablo 4");
+                newPres.member.roles.remove(role, "Playing Diablo 4");
               }
             }
           });
         }
         for (const activity of activities) {
           if (activity.name === "Diablo IV") {
-            message.guild.roles.fetch().then((x) => {
+            newPres.guild.roles.fetch().then((x) => {
               for (const item of x) {
                 const role = item[1];
                 if (role.name === "Active") {
-                  message.member.roles.add(role, "Playing Diablo 4");
+                  newPres.member.roles.add(role, "Playing Diablo 4");
                 }
               }
             });

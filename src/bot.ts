@@ -1,4 +1,4 @@
-import { Client, Message } from "discord.js";
+import { BaseChannel, ChannelType, Client, Message } from "discord.js";
 import { inject, injectable } from "inversify";
 import { TYPES } from "./types";
 
@@ -36,6 +36,13 @@ export class Bot {
                 const role = item[1];
                 if (role.name === "Active") {
                   newPres.member.roles.add(role, "Playing Diablo 4");
+                  let guildChannels = newPres.guild.channels;
+                  let channelName = 'activity-feed';
+                  let channel = guildChannels.cache.find(channel => channel.name === channelName);
+                  if (channel && channel.type === ChannelType.GuildText) {
+                    const message = `${newPres.user.username} has started playing Diablo IV on ${new Date().toString()}`
+                      channel.send(message);
+                  }
                 }
               }
             });

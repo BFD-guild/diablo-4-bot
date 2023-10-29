@@ -22,26 +22,33 @@ let Bot = class Bot {
         this.token = token;
     }
     listen() {
-        this.client.on("presenceUpdate", (message) => {
-            if (message.member) {
-                const activities = message.member.presence.activities;
+        this.client.on("presenceUpdate", (_, newPres) => {
+            if (newPres !== null && newPres.member !== null) {
+                const activities = newPres.member.presence.activities;
                 if (!activities.length) {
-                    message.guild.roles.fetch().then((x) => {
+                    newPres.guild.roles.fetch().then((x) => {
                         for (const item of x) {
                             const role = item[1];
                             if (role.name === "Active") {
-                                message.member.roles.remove(role, "Playing Diablo 4");
+                                newPres.member.roles.remove(role, "Playing Diablo 4");
                             }
                         }
                     });
                 }
                 for (const activity of activities) {
                     if (activity.name === "Diablo IV") {
-                        message.guild.roles.fetch().then((x) => {
+                        newPres.guild.roles.fetch().then((x) => {
                             for (const item of x) {
                                 const role = item[1];
                                 if (role.name === "Active") {
-                                    message.member.roles.add(role, "Playing Diablo 4");
+                                    newPres.member.roles.add(role, "Playing Diablo 4");
+                                    let guildChannels = newPres.guild.channels;
+                                    let channelName = 'activity-feed';
+                                    let channel = guildChannels.cache.find(channel => channel.name === channelName);
+                                    if (channel && channel.type === discord_js_1.ChannelType.GuildText) {
+                                        const message = `${newPres.user.username} has started playing Diablo IV on ${new Date().toString()}`;
+                                        channel.send(message);
+                                    }
                                 }
                             }
                         });

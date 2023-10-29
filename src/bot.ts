@@ -1,6 +1,6 @@
-import {Client, Message} from "discord.js";
-import {inject, injectable} from "inversify";
-import {TYPES} from "./types";
+import { Client, Message } from "discord.js";
+import { inject, injectable } from "inversify";
+import { TYPES } from "./types";
 
 @injectable()
 export class Bot {
@@ -16,29 +16,30 @@ export class Bot {
   }
 
   public listen(): Promise<string> {
-    this.client.on('presenceUpdate', (message) => {
-      const activities = message.member.presence.activities;
-      if(!activities.length){
-        message.guild.roles.fetch().then(x => {
-          for (const item of x){
-            const role = item[1];
-            if(role.name === 'Active'){
-              message.member.roles.remove(role, 'Playing Diablo 4')
-            }
-          }
-        })
-      }
-      for(const activity of activities){
-        if(activity.name === 'Diablo IV'){
-          message.guild.roles.fetch().then(x => {
-            for (const item of x){
+    this.client.on("presenceUpdate", (message) => {
+      if (message.member) {
+        const activities = message.member.presence.activities;
+        if (!activities.length) {
+          message.guild.roles.fetch().then((x) => {
+            for (const item of x) {
               const role = item[1];
-              if(role.name === 'Active'){
-                message.member.roles.add(role, 'Playing Diablo 4')
+              if (role.name === "Active") {
+                message.member.roles.remove(role, "Playing Diablo 4");
               }
             }
-          })
-
+          });
+        }
+        for (const activity of activities) {
+          if (activity.name === "Diablo IV") {
+            message.guild.roles.fetch().then((x) => {
+              for (const item of x) {
+                const role = item[1];
+                if (role.name === "Active") {
+                  message.member.roles.add(role, "Playing Diablo 4");
+                }
+              }
+            });
+          }
         }
       }
     });

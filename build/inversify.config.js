@@ -14,7 +14,5 @@ container.bind(types_1.TYPES.Client).toConstantValue(new discord_js_1.Client({
     ],
 }));
 container.bind(types_1.TYPES.Token).toConstantValue(process.env.TOKEN);
-const stuff = "stuff";
-const arr = [];
 exports.default = container;
 //# sourceMappingURL=inversify.config.js.map

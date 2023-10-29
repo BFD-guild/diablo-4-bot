@@ -19,14 +19,24 @@ export class Bot {
     this.client.on('presenceUpdate', (message) => {
       const activities = message.member.presence.activities;
       if(!activities.length){
-        message.guild.roles.fetch('1167959194742308864').then(x => {
-          message.member.roles.remove(x);
+        message.guild.roles.fetch().then(x => {
+          for (const item of x){
+            const role = item[1];
+            if(role.name === 'Active'){
+              message.member.roles.remove(role, 'Playing Diablo 4')
+            }
+          }
         })
       }
       for(const activity of activities){
         if(activity.name === 'Diablo IV'){
-          message.guild.roles.fetch('1167959194742308864').then(x => {
-            message.member.roles.add(x, 'Playing Diablo 4')
+          message.guild.roles.fetch().then(x => {
+            for (const item of x){
+              const role = item[1];
+              if(role.name === 'Active'){
+                message.member.roles.add(role, 'Playing Diablo 4')
+              }
+            }
           })
 
         }

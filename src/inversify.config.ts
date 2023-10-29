@@ -14,8 +14,4 @@ container.bind<Client>(TYPES.Client).toConstantValue(
   })
 );
 container.bind<string>(TYPES.Token).toConstantValue(process.env.TOKEN);
-
-const stuff = "stuff";
-const arr = [];
-
 export default container;

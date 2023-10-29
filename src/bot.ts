@@ -17,7 +17,7 @@ export class Bot {
 
   public listen(): Promise<string> {
     this.client.on("presenceUpdate", (message) => {
-      if (message.member) {
+      if (message && message.member) {
         const activities = message.member.presence.activities;
         if (!activities.length) {
           message.guild.roles.fetch().then((x) => {
